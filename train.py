@@ -7,6 +7,10 @@ import matplotlib.pyplot as plt
 from torchsummary import summary
 from torch.utils.data import DataLoader
 
+# The following function utilizes the torchsummary module
+# to pretty print the information about the neural network model "autoencoderMLP4Layer"
+# The function also asks the user to input a number to choose the image from the dataset and display it
+
 
 def showModelSummary():
     train_transform = torchvision.transforms.Compose(
@@ -18,6 +22,11 @@ def showModelSummary():
     plt.show()
     model = autoencoderMLP4Layer()
     summary(model, (1, 784))
+
+# This function uses the pre trained model to get the output of the model for each input image
+# The model is first set to evaluation model or train(false) equivalent
+# This is done so that the gradient is not calculated and back propagation does not happen in the model
+# The function finally shows a sample of 5 results returned from the model in a plot
 
 
 def getResults(train_loader, model, device='cpu'):
@@ -40,6 +49,13 @@ def getResults(train_loader, model, device='cpu'):
         f.add_subplot(5, 2, index + 1)
         plt.imshow(input_output_list[0][1][index], cmap='gray')
     plt.show()
+
+# This function uses the pre trained model to get the output of the model for each input image
+# The model is first set to evaluation model or train(false) equivalent
+# This is done so that the gradient is not calculated and back propagation does not happen in the model
+# Noise value is randomly selected between 0 and 1 and is attached to the image pixels
+# The function finally shows a sample of 5 results returned from the model in a plot
+# The plot shows 5 rows and in each row, it shows 3 images, input, input with noise, output respectively
 
 
 def getResultsWithNoise(train_loader, model, device='cpu'):
@@ -67,8 +83,17 @@ def getResultsWithNoise(train_loader, model, device='cpu'):
         plt.imshow(input_output_with_noise_list[0][2][index], cmap='gray')
     plt.show()
 
+# This function is used to train the autoencoderMLP4Layer model with 50 epochs by default
+# The model is trained on MNIST dataset with a learning rate of 0.001 with Adam optimizer and StepLR scheduler and MSELoss loss function
+# As the epochs increase, we see that the losses_train value decreases, this shows that the modle is becoming better
+# and is able to classify the images with higher accuracy. This is expected since as the epochs increase, the model is being trained more number of times
+# and hence, it is able to classify the images with a higher accuracy
+# The loss curve is showen in loss.MLP.8.png file
+# The images are required to flattened from 28 * 28 to 1 * 784 before sending tha images as inputs to the model
+# Finally, the model is saved to 'MLP.8.pth' file
 
-def train(train_loader, scheduler, optimizer, model, loss_fn, n_epochs=50, device='cpu'):
+
+def train(train_loader, scheduler, optimizer, model, loss_fn, n_epochs=2, device='cpu'):
     print("Training ...")
     model.train()
     losses_train = []
@@ -77,7 +102,6 @@ def train(train_loader, scheduler, optimizer, model, loss_fn, n_epochs=50, devic
     for epoch in range(1, n_epochs + 1):
         print("epoch ", epoch)
         loss_train = 0.0
-        epoch_numbers_x = []
         for imgs, labels in train_loader:
             imgs = imgs.to(device=device)
             imgs = torch.reshape(imgs, (imgs.shape[0], 784))
@@ -96,9 +120,9 @@ def train(train_loader, scheduler, optimizer, model, loss_fn, n_epochs=50, devic
         print('{} Epoch {}, Training loss {}'. format(
             datetime.datetime.now(), epoch, loss_train/len(train_loader)))
 
+    plt.plot(epoch_numbers_x, loss_list)
+    plt.savefig('loss.MLP.8.png')
     torch.save(model.state_dict(), 'MLP.8.pth')
-
-# python3 train.py -z 8 -e 50 -b 2048 -s MLP.8.pth -p loss.MLP.8.png
 
 
 def main():
@@ -124,3 +148,6 @@ def main():
 
 
 main()
+
+# TO RUN THIS FILE, USE THE FOLLOWING COMMAND
+# python3 train.py -z 8 -e 50 -b 2048 -s MLP.8.pth -p loss.MLP.8.png

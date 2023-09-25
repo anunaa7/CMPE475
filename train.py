@@ -93,7 +93,7 @@ def getResultsWithNoise(train_loader, model, device='cpu'):
 # Finally, the model is saved to 'MLP.8.pth' file
 
 
-def train(train_loader, scheduler, optimizer, model, loss_fn, n_epochs=2, device='cpu'):
+def train(train_loader, scheduler, optimizer, model, loss_fn, n_epochs=50, device='cpu'):
     print("Training ...")
     model.train()
     losses_train = []
@@ -123,6 +123,12 @@ def train(train_loader, scheduler, optimizer, model, loss_fn, n_epochs=2, device
     plt.plot(epoch_numbers_x, loss_list)
     plt.savefig('loss.MLP.8.png')
     torch.save(model.state_dict(), 'MLP.8.pth')
+
+# The main function first calls the following methods in order
+# showModelSummary
+# train
+# getResults
+# getResultsWithNoise
 
 
 def main():

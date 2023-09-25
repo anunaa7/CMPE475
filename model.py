@@ -1,6 +1,14 @@
 import torch
 import torchvision
 
+# The model has an input layer of 784 neurons, then another layer of 392 neuron,
+# The layer after bottleneck is of 8 neurons, then the next layer is again, 392
+# The output layer is 784, the same as the input layer
+# The model uses relu as the activation function
+# The forward function is de-structured into encode and decode functions,
+# Where the encode represents the layers until the bottleneck
+# and the decode represents the layers from bottleneck to output
+
 
 class autoencoderMLP4Layer(torch.nn.Module):
     def __init__(self, N_input=784, N_bottleneck=8, N_output=784):

@@ -31,6 +31,8 @@ def train(train_loader, scheduler, optimizer, model, loss_fn, n_epochs=50, devic
     for epoch in range(1, n_epochs + 1):
         print("epoch ", epoch)
         loss_train = 0.0
+        epoch_numbers_x = []
+        input_output_list = []
         # print(next(iter(train_loader)))
         for imgs, labels in train_loader:
             imgs = imgs.to(device=device)
@@ -70,12 +72,13 @@ def train(train_loader, scheduler, optimizer, model, loss_fn, n_epochs=50, devic
     #         # plt.clf()
 
     f = plt.figure()
-    f.add_subplot(1, 2, 1)
+    for index in range(5):
+        f.add_subplot(1, 2, 1)
 
-    plt.imshow(input_output_list[-1][0][0], cmap='gray')
-    f.add_subplot(1, 2, 2)
-    plt.imshow(input_output_list[-1][0][1], cmap='gray')
-    plt.show()
+        plt.imshow(input_output_list[0][0][0], cmap='gray')
+        f.add_subplot(1, 2, 2)
+        plt.imshow(input_output_list[0][0][1], cmap='gray')
+        plt.show()
 
 
 train_transform = torchvision.transforms.Compose(

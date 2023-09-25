@@ -114,6 +114,7 @@ def main():
     scheduler = torch.optim.lr_scheduler.StepLR(
         optimizer, step_size=30, gamma=0.1)
     loss_fn = torch.nn.MSELoss()
+    showModelSummary()
     train(train_loader=train_dataloader, scheduler=scheduler,
           optimizer=optimizer, model=autoEncoder, loss_fn=loss_fn)
 

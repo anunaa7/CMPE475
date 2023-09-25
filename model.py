@@ -11,7 +11,7 @@ class autoencoderMLP4Layer(torch.nn.Module):
         self.fc3 = torch.nn.Linear(N_bottleneck, N2)
         self.fc4 = torch.nn.Linear(N2, N_output)
         self.type = 'MLP4'
-        self.input_shape = (1, 784 * 784)
+        self.input_shape = (1, 28 * 28)
 
     def forward(self, X):
         X = self.fc1(X)
